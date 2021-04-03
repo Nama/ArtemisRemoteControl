@@ -4,6 +4,8 @@ import logging
 from os import environ
 from json import loads, dumps
 
+logging.basicConfig(level=logging.WARNING)
+
 
 def _getapiurl(ep):
     txt_path = environ['ProgramData'] + '/Artemis/webserver.txt'
