@@ -13,7 +13,7 @@ try:
     config_name = __name__.split('.')[1]
 except IndexError:
     getleds()
-    print('I created a leds.json in scripts/. Check this file and edit config.json to your needs.')
+    print('I created a leds.json. Check this file and edit config.json to your needs.')
     print('Run run.py after config.')
     exit()
 
