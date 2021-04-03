@@ -11,7 +11,7 @@ If you already have python installed and know how to venv and pip, use this meth
  2. `pip install https://github.com/Nama/ArtemisRemoteControl/archive/refs/heads/main.zip`
 
 ### Config
-Edit `config.json` to your needs. Put the [example](https://github.com/Nama/ArtemisRemoteControl/tree/master/scripts) or your own scripts into your `scripts` folder.
+Edit `config.json` to your needs. Put the [example](https://github.com/Nama/ArtemisRemoteControl/tree/main/scripts) or your own scripts into your `scripts` folder.
 If you've downloaded the exe, run it. Else, run `run.py`.
 
 ## Scripting
