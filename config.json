@@ -1,32 +1,71 @@
 {
     "tasmota": [
-        [
-            "http://192.168.12.3/cm?cmnd=Power&user=admin&password=pw",
-            "POWER",
-            "ON",
-            [
-                "Logitech G910v2-Logitech-G910v2-Keyboard"
-            ],
-            [
-                "Keyboard_Programmable6"
-            ],
-            "#0000FF",
-            "#821700",
-            "#000000"
-        ],
-        [
-            "http://192.168.12.4/cm?cmnd=Power&user=admin&password=pw",
-            "POWER",
-            "ON",
-            [
-                "Logitech G910v2-Logitech-G910v2-Keyboard"
-            ],
-            [
-                "Keyboard_Programmable7"
-            ],
-            "#0000FF",
-            "#821700",
-            "#000000"
-        ]
+        {
+            "base_url": "http://192.168.1.13/cm?user=admin&password=pw&cmnd=",
+            "data": [
+                {
+                    "colors": [
+                        "#0000FF",
+                        "#821700",
+                        "#000000"
+                    ],
+                    "devices": [
+                        "Logitech G910v2-Logitech-G910v2-Keyboard",
+                        "Logitech G910v2-Logitech-G910v2-Keyboard",
+                        "Logitech G910v2-Logitech-G910v2-Keyboard",
+                        "Logitech G910v2-Logitech-G910v2-Keyboard"
+                    ],
+                    "key": "Dimmer",
+                    "leds": [
+                        "Keyboard_Programmable6",
+                        "Keyboard_Programmable7",
+                        "Keyboard_Programmable8",
+                        "Keyboard_Programmable9"
+                    ],
+                    "uri": "Dimmer",
+                    "value": [
+                        15,
+                        45
+                    ]
+                },
+                {
+                    "colors": [
+                        "#0000FF",
+                        "#821700",
+                        "#000000"
+                    ],
+                    "devices": [
+                        "Logitech G910v2-Logitech-G910v2-Keyboard"
+                    ],
+                    "key": "POWER",
+                    "leds": [
+                        "Keyboard_Programmable5"
+                    ],
+                    "uri": "Power",
+                    "value": "ON"
+                }
+            ]
+        },
+        {
+            "base_url": "http://192.168.1.9/cm?user=admin&password=pw&cmnd=",
+            "data": [
+                {
+                    "colors": [
+                        "#0000FF",
+                        "#821700",
+                        "#000000"
+                    ],
+                    "devices": [
+                        "Logitech G910v2-Logitech-G910v2-Keyboard"
+                    ],
+                    "key": "POWER",
+                    "leds": [
+                        "Keyboard_Programmable2"
+                    ],
+                    "uri": "Power",
+                    "value": "ON"
+                }
+            ]
+        }
     ]
 }

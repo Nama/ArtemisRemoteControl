@@ -3,6 +3,7 @@
 import logging
 from json import loads
 from time import sleep
+from numpy import interp
 from threading import Thread
 from requests import get
 from requests.exceptions import ConnectionError
@@ -17,83 +18,110 @@ except IndexError:
     print('Run run.py after config.')
     exit()
 
-    # Code, I'm not sure to use
-    # Would need to cd out of scripts/
-    # And not sure if it is easier to config that way instead of writing directly in the file
-    config_name = __file__.split('\\')[-1].split('.')[0]
-    logging.debug(config_name)
-    config = Config()
-    config.load(config_name)
-    done = False
-    while not done:
-        url = input('Enter the URL to your tasmota-device, with credentials, like: http://192.168.4.123/cm?cmnd=Power&user=admin&password=pw')
-        key = input('Enter the key of the value, like POWER in {\'POWER\': \'ON\':\n')
-        value = input('Enter the value, like ON in {\'POWER\': \'ON\':\n')
-        done_devices = False
-        device_index = 1
-        devices = list()
-        print('Look in scripts/leds.json for the LEDs and devices.')
-        while not done_devices:
-            user_input = input(f'Type the device id of the {device_index}. led. Leave empty after you are done:\n')
-            device_index += 1
-            if user_input:
-                devices.append(user_input)
-            else:
-                done_devices = True
-        done_leds = False
-        led_index = 1
-        leds = list()
-        print('Look in scripts/leds.json for the LEDs and devices.')
-        while not done_leds:
-            user_input = input(f'Type the led id of the {led_index}. led. Leave empty after you are done:\n')
-            led_index += 1
-            if user_input:
-                leds.append(user_input)
-            else:
-                done_leds = True
-        color1 = input('Enter the color for the state/value you choose earlier in format #ffffff:\n')
-        color2 = input('Enter the color for the other state in format #ffffff:')
-        color3 = input('Enter the color for the disconnected state in format #ffffff:\n')
-        config.add(config_name, [url, key, value, devices, leds, color1, color2, color3])
-        more = input('Saved. If you want to add another device, type \'y\', otherwise leave empty and press enter.\n')
-        if not more:
-            done = True
-    print('Run run.py now.')
-    exit()
-
 
 def loop():
     while True:
         for device in config.config[config_name]:
-            url, keyword, string, devices, leds, color_on, color_off, color_dc = device
+            for uri in device['data']:
+                url = device['base_url'] + uri['uri']
+                try:
+                    response = get(url, timeout=1)
+                    status = response.status_code
+                except ConnectionError:
+                    status = False
+                if status != 200:
+                    # send "Disconnected" state
+                    logging.debug('Can\'t connect to device')
+                    setleds(uri['devices'], uri['leds'], uri['colors'][2])
+                    continue
 
-            try:
-                response = get(url, timeout=1)
-                status = response.status_code
-            except ConnectionError:
-                status = False
-            if status != 200:
-                # send "Disconnected" state
-                logging.debug('Can\'t connect to device')
-                setleds(devices, leds, color_dc)
-                continue
-
-            text = loads(response.content.decode('utf-8'))
-            logging.debug(text)
-            if text[keyword] == string:
-                # Send "true" state
-                logging.debug('Found searching string')
-                setleds(devices, leds, color_on)
-            else:
-                # Send "false" state
-                logging.debug('Not found searching string')
-                setleds(devices, leds, color_off)
+                text = loads(response.content.decode('utf-8'))
+                logging.debug(text)
+                if isinstance(uri['value'], list):
+                    percent = interp(int(text[uri['key']]), uri['value'], [0, 100])
+                    logging.debug(percent)
+                    if len(uri['leds']) == 1:
+                        decimal = 255 / 100 * percent  # 255 is FF in hex
+                        alpha = f'#{hex(decimal)}'
+                        ocolor = uri['colors'][0].replace('#', '')
+                        color = f'{alpha}{ocolor}'
+                        setleds(uri['devices'], uri['leds'], color)
+                    else:
+                        setleds(uri['devices'], uri['leds'], uri['colors'][1])
+                        led_count = len(uri['leds'])
+                        led_light = (led_count / 100) * percent
+                        devices = list()
+                        leds = list()
+                        logging.debug(led_count)
+                        logging.debug(led_light)
+                        for led in range(int(led_light)):
+                            devices.append(uri['devices'][led])
+                            leds.append(uri['leds'][led])
+                        setleds(devices, leds, uri['colors'][0])
+                else:
+                    if text[uri['key']] == uri['value']:
+                        # Send "true" state
+                        logging.debug('Found searching string')
+                        setleds(uri['devices'], uri['leds'], uri['colors'][0])
+                    else:
+                        # Send "false" state
+                        logging.debug('Not found searching string')
+                        setleds(uri['devices'], uri['leds'], uri['colors'][1])
             sleep(1)
         sleep(5)
 
 
-logging.basicConfig(level=logging.WARNING)
+def save():
+    device = dict()
+    device['base_url'] = 'http://192.168.1.12/cm?user=admin&password=pw&cmnd='
+    device['data'] = list()
+    # Range based values
+    device['data'].append(dict())
+    device['data'][-1]['uri'] = 'Dimmer'
+    device['data'][-1]['key'] = 'Dimmer'
+    device['data'][-1]['value'] = [15, 60]  # make sure, that these are integers
+    device['data'][-1]['devices'] = [  # if you use only one led here, the opacity will be the range indicator
+        'Logitech G910v2-Logitech-G910v2-Keyboard',
+        'Logitech G910v2-Logitech-G910v2-Keyboard',
+        'Logitech G910v2-Logitech-G910v2-Keyboard',
+        'Logitech G910v2-Logitech-G910v2-Keyboard'
+    ]
+    device['data'][-1]['leds'] = [
+        'Keyboard_Programmable6',
+        'Keyboard_Programmable7',
+        'Keyboard_Programmable8',
+        'Keyboard_Programmable9'
+    ]
+    device['data'][-1]['colors'] = [
+        '#0000FF',  # active color, omit alpha value if you use only one key
+        '#821700',  # the "background"
+        '#000000'
+    ]
+    # bool values
+    device['data'].append(dict())
+    device['data'][-1]['uri'] = 'Power'
+    device['data'][-1]['key'] = 'POWER'
+    device['data'][-1]['value'] = 'ON'
+    device['data'][-1]['devices'] = [
+        'Logitech G910v2-Logitech-G910v2-Keyboard'
+    ]
+    device['data'][-1]['leds'] = [
+        'Keyboard_Programmable4'
+        ]
+    device['data'][-1]['colors'] = [
+        '#0000FF',
+        '#821700',
+        '#000000'
+    ]
+
+    config.add(config_name, device)
+    logging.warning('Saved.')
+
+
 config = Config()
 config.load(config_name)
+# Change the values in save() and uncomment these two lines, run run.py *once* and comment them again
+#save()
+#exit()
 tloop = Thread(target=loop)
 tloop.start()
