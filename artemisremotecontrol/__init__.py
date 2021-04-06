@@ -4,17 +4,19 @@ import logging
 from os import environ
 from json import loads, dumps
 
-logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(filename='error.log', level=logging.WARNING)
 
 
 def _getapiurl(ep):
     txt_path = environ['ProgramData'] + '/Artemis/webserver.txt'
-    url_endpoints = open(txt_path, 'r').readline() + 'api/plugins/endpoints'
+    url_endpoints = open(txt_path, 'r').readline() + 'plugins/endpoints'
 
     try:
         response = get(url_endpoints)
     except ConnectionError:
         logging.error('Can\'t connect to Artemis')
+        return None
+    if response.status_code != 200:
         return None
     endpoints = loads(response.content)
     url = ''
