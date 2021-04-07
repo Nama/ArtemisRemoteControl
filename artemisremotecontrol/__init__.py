@@ -1,5 +1,5 @@
 from requests import get, post
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError, ChunkedEncodingError
 import logging
 from os import environ
 from json import loads, dumps
@@ -13,7 +13,7 @@ def _getapiurl(ep):
 
     try:
         response = get(url_endpoints)
-    except ConnectionError:
+    except (ConnectionError, ChunkedEncodingError):
         logging.error('Can\'t connect to Artemis')
         return None
     if response.status_code != 200:
@@ -51,7 +51,7 @@ def setleds(deviceids: list, ledids: list, color: str):
     logging.debug(data)
     try:
         response = post(url, data=str(data))
-    except ConnectionError:
+    except (ConnectionError, ChunkedEncodingError):
         logging.error('Can\'t connect to Artemis to set color')
         return
     if response.status_code != 200:

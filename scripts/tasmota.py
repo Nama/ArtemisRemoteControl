@@ -5,7 +5,7 @@ from json import loads
 from time import sleep
 from threading import Thread
 from requests import get
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError, ChunkedEncodingError
 from artemisremotecontrol.config import Config
 from artemisremotecontrol import getleds, setleds
 
@@ -26,7 +26,7 @@ def loop():
                 try:
                     response = get(url, timeout=1)
                     status = response.status_code
-                except ConnectionError:
+                except (ConnectionError, ChunkedEncodingError):
                     status = False
                 if status != 200:
                     # send "Disconnected" state
