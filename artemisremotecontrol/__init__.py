@@ -4,7 +4,7 @@ import logging
 from os import environ
 from json import loads, dumps
 
-logging.basicConfig(filename='error.log', level=logging.WARNING)
+logging.basicConfig(filename='error.log', format='%(asctime)s %(levelname)s:%(message)s', level=logging.WARNING)
 
 
 def _getapiurl(ep):

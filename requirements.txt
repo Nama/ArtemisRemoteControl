@@ -1,3 +1,2 @@
 requests>=2.25.1
 simple-plugin-loader>=1.6
-numpy>=1.20.2

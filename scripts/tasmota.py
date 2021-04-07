@@ -3,7 +3,6 @@
 import logging
 from json import loads
 from time import sleep
-from numpy import interp
 from threading import Thread
 from requests import get
 from requests.exceptions import ConnectionError
@@ -38,8 +37,8 @@ def loop():
                 text = loads(response.content.decode('utf-8'))
                 logging.debug(text)
                 if isinstance(uri['value'], list):
-                    percent = interp(int(text[uri['key']]), uri['value'], [0, 100])
-                    logging.debug(percent)
+                    percent = (int(text[uri['key']]) - uri['value'][0])/((uri['value'][1] - uri['value'][0])/100)
+                    logging.debug(f'Percent: {percent}')
                     if len(uri['leds']) == 1:
                         decimal = 255 / 100 * percent  # 255 is FF in hex
                         alpha = f'#{hex(decimal)}'
