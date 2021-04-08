@@ -7,5 +7,9 @@ setup(
     license='MIT',
     author='Yama',
     author_email='',
-    description='Library for RemoteControlModule for Artemis'
+    description='Library for RemoteControlModule for Artemis',
+    install_requires=[
+        'requests>=2.25.1',
+        'simple-plugin-loader>=1.6'
+    ]
 )
