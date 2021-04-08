@@ -7,22 +7,19 @@ on:
 jobs:
     build:
 
-        runs-on: ubuntu-latest
+        runs-on: windows-latest
 
         steps:
             - uses: actions/checkout@v2
             - uses: actions/setup-python@v2
               with:
-                  python-version: '3.7.5'
+                  python-version: '3.7'
             - run: python setup.py build
             - run: python setup.py install
-
-            - name: Package Application
-              uses: JackMcKew/pyinstaller-action-windows@main
-              with:
-                  path: .
+            - run: pip install pyinstaller
+            - run: pyinstaller ArtemisRemoteControl.spec
 
             - uses: actions/upload-artifact@v2
               with:
                   name: ArtemisRemoteControl
-                  path: dist/windows
+                  path: dist
