@@ -4,6 +4,8 @@ import logging
 from os import environ
 from json import loads, dumps
 
+__version__ = '0.3.2'
+
 logging.basicConfig(filename='error.log', format='%(asctime)s %(levelname)s:%(message)s', level=logging.WARNING)
 
 
