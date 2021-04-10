@@ -24,7 +24,7 @@ def loop():
             for uri in device['data']:
                 url = device['base_url'] + uri['uri']
                 try:
-                    response = get(url, timeout=1)
+                    response = get(url, timeout=0.3)
                     status = response.status_code
                 except (ConnectionError, ChunkedEncodingError, ReadTimeout):
                     status = False

@@ -12,7 +12,7 @@ def _getapiurl(ep):
     url_endpoints = open(txt_path, 'r').readline() + 'plugins/endpoints'
 
     try:
-        response = get(url_endpoints)
+        response = get(url_endpoints, timeout=0.3)
     except (ConnectionError, ChunkedEncodingError, ReadTimeout):
         logging.error('Can\'t connect to Artemis')
         return None
@@ -50,7 +50,7 @@ def setleds(deviceids: list, ledids: list, color: str):
         data.append({'DeviceId': deviceids[i], 'LedId': led, 'Color': color})
     logging.debug(data)
     try:
-        response = post(url, data=str(data))
+        response = post(url, data=str(data), timeout=0.3)
     except (ConnectionError, ChunkedEncodingError, ReadTimeout):
         logging.error('Can\'t connect to Artemis to set color')
         return
