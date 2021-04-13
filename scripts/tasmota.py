@@ -46,17 +46,27 @@ def loop():
                         color = f'{alpha}{ocolor}'
                         setleds(uri['devices'], uri['leds'], color)
                     else:
-                        setleds(uri['devices'], uri['leds'], uri['colors'][1])
                         led_count = len(uri['leds'])
                         led_light = (led_count / 100) * percent
                         devices = list()
                         leds = list()
                         logging.debug(led_count)
                         logging.debug(led_light)
+                        if led_light > led_count:
+                            led_light = led_count
                         for led in range(int(led_light)):
                             devices.append(uri['devices'][led])
                             leds.append(uri['leds'][led])
                         setleds(devices, leds, uri['colors'][0])
+                        devices = list()
+                        leds = list()
+                        for led in range(led_count-int(led_light)):
+                            index = led + 1
+                            devices.append(uri['devices'][-index])
+                            leds.append(uri['leds'][-index])
+                            logging.debug(devices)
+                            logging.debug(leds)
+                        setleds(devices, leds, uri['colors'][1])
                 else:
                     if text[uri['key']] == uri['value']:
                         # Send "true" state
