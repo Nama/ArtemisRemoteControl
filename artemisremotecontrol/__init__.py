@@ -31,28 +31,20 @@ def _getapiurl(ep):
         return None
 
 
-def getleds():
-    url = _getapiurl('GetLeds')
+def setleds(name: str, value: str):
+    # Weird, its an int if the string contains only an int
+    if isinstance(value, int):
+        url = _getapiurl('SetIntValue')
+    else:
+        url = _getapiurl('SetStringValue')
     if not url:
         return
-    response = post(url)
-    leds = loads(response.content)
-    with open('leds.json', 'w') as leds_file:
-        leds_file.writelines(dumps(leds, indent=4))
-
-
-def setleds(deviceids: list, ledids: list, color: str):
-    url = _getapiurl('SetLeds')
-    if not url:
-        return
-    data = list()
-    for i, led in enumerate(ledids):
-        data.append({'DeviceId': deviceids[i], 'LedId': led, 'Color': color})
+    data = f'{name}:{value}'
     logging.debug(data)
     try:
-        response = post(url, data=str(data), timeout=0.3)
+        response = post(url, data=data, timeout=0.3)
     except (ConnectionError, ChunkedEncodingError, ReadTimeout):
-        logging.error('Can\'t connect to Artemis to set color')
+        logging.error('Can\'t connect to Artemis to send data')
         return
     if response.status_code != 200:
         logging.debug(response.content)

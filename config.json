@@ -4,68 +4,61 @@
             "base_url": "http://192.168.1.13/cm?user=admin&password=pw&cmnd=",
             "data": [
                 {
-                    "colors": [
-                        "#0000FF",
-                        "#821700",
-                        "#000000"
-                    ],
-                    "devices": [
-                        "Logitech G910v2-Logitech-G910v2-Keyboard",
-                        "Logitech G910v2-Logitech-G910v2-Keyboard",
-                        "Logitech G910v2-Logitech-G910v2-Keyboard",
-                        "Logitech G910v2-Logitech-G910v2-Keyboard"
-                    ],
                     "key": "Dimmer",
-                    "leds": [
-                        "Keyboard_Programmable6",
-                        "Keyboard_Programmable7",
-                        "Keyboard_Programmable8",
-                        "Keyboard_Programmable9"
-                    ],
                     "uri": "Dimmer",
-                    "value": [
-                        15,
-                        45
-                    ]
+                    "value": null
                 },
                 {
-                    "colors": [
-                        "#0000FF",
-                        "#821700",
-                        "#000000"
-                    ],
-                    "devices": [
-                        "Logitech G910v2-Logitech-G910v2-Keyboard"
-                    ],
                     "key": "POWER",
-                    "leds": [
-                        "Keyboard_Programmable5"
-                    ],
                     "uri": "Power",
                     "value": "ON"
                 }
-            ]
+            ],
+            "name": "LivingRoomLight"
         },
         {
             "base_url": "http://192.168.1.9/cm?user=admin&password=pw&cmnd=",
             "data": [
                 {
-                    "colors": [
-                        "#0000FF",
-                        "#821700",
-                        "#000000"
-                    ],
-                    "devices": [
-                        "Logitech G910v2-Logitech-G910v2-Keyboard"
-                    ],
                     "key": "POWER",
-                    "leds": [
-                        "Keyboard_Programmable2"
-                    ],
                     "uri": "Power",
                     "value": "ON"
                 }
-            ]
+            ],
+            "name": "NintendoSign"
+        },
+        {
+            "base_url": "http://192.168.1.10/cm?user=admin&password=pw&cmnd=",
+            "data": [
+                {
+                    "key": "POWER",
+                    "uri": "Power",
+                    "value": "ON"
+                }
+            ],
+            "name": "TV"
+        },
+        {
+            "base_url": "http://192.168.1.11/cm?user=admin&password=pw&cmnd=",
+            "data": [
+                {
+                    "key": "POWER",
+                    "uri": "Power",
+                    "value": "ON"
+                }
+            ],
+            "name": "Plug3"
+        },
+        {
+            "base_url": "http://192.168.1.12/cm?user=admin&password=pw&cmnd=",
+            "data": [
+                {
+                    "key": "POWER",
+                    "uri": "Power",
+                    "value": "ON"
+                }
+            ],
+            "name": "3dprinter"
         }
     ]
 }
