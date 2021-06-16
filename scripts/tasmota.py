@@ -29,7 +29,7 @@ def loop():
                 if status != 200:
                     # send "Disconnected" state
                     logging.debug('Can\'t connect to device')
-                    setleds(device['name'], 'down')
+                    setleds(f'{device["name"]}{uri["uri"]}', 'down')
                     continue
 
                 text = loads(response.content.decode('utf-8'))
