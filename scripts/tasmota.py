@@ -32,9 +32,9 @@ def loop():
                     setleds(f'{device["name"]}{uri["uri"]}', 'down')
                     continue
 
-                text = loads(response.content.decode('utf-8'))
-                logging.debug(text)
-                value = text[uri['key']]
+                response_content = loads(response.content.decode('utf-8'))
+                logging.debug(response_content)
+                value = response_content[uri['key']]
                 logging.debug(f'Value: {value}')
                 setleds(f'{device["name"]}{uri["uri"]}', value)
             sleep(0.1)

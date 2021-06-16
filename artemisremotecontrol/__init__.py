@@ -31,8 +31,7 @@ def _getapiurl(ep):
         return None
 
 
-def setleds(name: str, value: str):
-    # Weird, its an int if the string contains only an int
+def setleds(name: str, value):
     if isinstance(value, int):
         url = _getapiurl('SetIntValue')
     else:
