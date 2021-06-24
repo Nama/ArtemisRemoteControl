@@ -5,13 +5,11 @@
             "data": [
                 {
                     "key": "Dimmer",
-                    "uri": "Dimmer",
-                    "value": null
+                    "uri": "Dimmer"
                 },
                 {
                     "key": "POWER",
-                    "uri": "Power",
-                    "value": "ON"
+                    "uri": "Power"
                 }
             ],
             "name": "LivingRoomLight"
@@ -21,8 +19,7 @@
             "data": [
                 {
                     "key": "POWER",
-                    "uri": "Power",
-                    "value": "ON"
+                    "uri": "Power"
                 }
             ],
             "name": "NintendoSign"
@@ -32,8 +29,7 @@
             "data": [
                 {
                     "key": "POWER",
-                    "uri": "Power",
-                    "value": "ON"
+                    "uri": "Power"
                 }
             ],
             "name": "TV"
@@ -43,8 +39,7 @@
             "data": [
                 {
                     "key": "POWER",
-                    "uri": "Power",
-                    "value": "ON"
+                    "uri": "Power"
                 }
             ],
             "name": "Plug3"
@@ -54,8 +49,7 @@
             "data": [
                 {
                     "key": "POWER",
-                    "uri": "Power",
-                    "value": "ON"
+                    "uri": "Power"
                 }
             ],
             "name": "3dprinter"
