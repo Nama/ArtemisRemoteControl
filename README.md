@@ -18,7 +18,7 @@ If you've downloaded the exe, run it. Else, run `run.py`.
 - check `tasmota.py` for a full working example
 - Always use `from threading import Thread`, the plugin loader is blocking
 - Do `from artemisremotecontrol import setleds`
-    - To set LEDs: `setleds({'scriptname': {key, value}, url)`
+    - To set LEDs: `setleds('scriptname', {key, value})`
         - This appears in Artemis as a DataModel
         - Set in Artemis what you want to do with the data
 - You can use the `Config()` class for your own scripts  
@@ -27,7 +27,7 @@ If you've downloaded the exe, run it. Else, run `run.py`.
 from artemisremotecontrol.config import Config
 from artemisremotecontrol import setleds
 from threading import Thread
-from asyncio import run, sleep
+from time import sleep
 try:
     # Get the filename and use it for the config
     config_name = __name__.split('.')[1]
@@ -39,14 +39,14 @@ except IndexError:
 async def loop():
     while True:
         data = {'key', 'value'}
-        await setleds(config_name, data)
-        await sleep(5)
+        setleds(config_name, data)
+        sleep(5)
 
 config = Config()
 config.load(config_name)
 #Config.add(config_name, device)
 
-tloop = Thread(target=lambda: run(loop()))
+tloop = Thread(target=loop)
 tloop.start()
 ```
 
