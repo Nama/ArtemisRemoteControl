@@ -5,7 +5,7 @@ import logging
 logging.basicConfig(filename='error.log', format='%(asctime)s %(levelname)s:%(message)s', level=logging.WARNING)
 
 
-async def setleds(name: str, value: dict):
+def setleds(name: str, value: dict):
     url = 'http://localhost:9696/json-datamodel/'
     logging.debug(value)
     try:

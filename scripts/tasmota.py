@@ -2,7 +2,7 @@
 
 import logging
 from json import loads
-from asyncio import run, sleep
+from time import sleep
 from threading import Thread
 from requests import get
 from requests.exceptions import ConnectionError, ChunkedEncodingError, ReadTimeout
@@ -16,7 +16,7 @@ except IndexError:
     exit()
 
 
-async def loop():
+def loop():
     while True:
         data = {}
         for device in config.config[config_name]:
@@ -40,9 +40,9 @@ async def loop():
                 value = response_content[uri['key']]
                 logging.debug(f'Value: {value}')
                 data[uri['uri']][device['name']] = value
-            await sleep(0.1)
-        await setleds(config_name, data)
-        await sleep(5)
+            sleep(0.1)
+        setleds(config_name, data)
+        sleep(5)
 
 
 def save():
@@ -64,5 +64,5 @@ config.load(config_name)
 # Change the values in save() and uncomment these two lines, run run.py *once* and comment them again
 #save()
 #exit()
-tloop = Thread(target=lambda: run(loop()))
+tloop = Thread(target=loop)
 tloop.start()
