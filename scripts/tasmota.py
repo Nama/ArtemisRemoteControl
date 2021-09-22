@@ -2,7 +2,7 @@
 
 import logging
 from json import loads
-from time import sleep
+from asyncio import run, sleep
 from threading import Thread
 from requests import get
 from requests.exceptions import ConnectionError, ChunkedEncodingError, ReadTimeout
@@ -15,18 +15,15 @@ except IndexError:
     print('Run run.py after config.')
     exit()
 
-endpoint_url = None
 
-
-def loop():
-    global endpoint_url
+async def loop():
     while True:
-        data = {config_name: {}}
+        data = {}
         for device in config.config[config_name]:
             for uri in device['data']:
                 url = device['base_url'] + uri['uri']
-                if not uri['uri'] in data[config_name]:
-                    data[config_name][uri['uri']] = {}
+                if not uri['uri'] in data:
+                    data[uri['uri']] = {}
                 try:
                     response = get(url, timeout=0.3)
                     status = response.status_code
@@ -35,17 +32,17 @@ def loop():
                 if status != 200:
                     # send "Disconnected" state
                     logging.debug('Can\'t connect to device')
-                    data[config_name][uri['uri']][device['name']] = 'down'
+                    data[uri['uri']][device['name']] = 'down'
                     continue
 
                 response_content = loads(response.content.decode('utf-8'))
                 logging.debug(response_content)
                 value = response_content[uri['key']]
                 logging.debug(f'Value: {value}')
-                data[config_name][uri['uri']][device['name']] = value
-            sleep(0.1)
-        endpoint_url = setleds(data, endpoint_url)
-        sleep(5)
+                data[uri['uri']][device['name']] = value
+            await sleep(0.1)
+        await setleds(config_name, data)
+        await sleep(5)
 
 
 def save():
@@ -67,5 +64,5 @@ config.load(config_name)
 # Change the values in save() and uncomment these two lines, run run.py *once* and comment them again
 #save()
 #exit()
-tloop = Thread(target=loop)
+tloop = Thread(target=lambda: run(loop()))
 tloop.start()

@@ -21,15 +21,13 @@ If you've downloaded the exe, run it. Else, run `run.py`.
     - To set LEDs: `setleds({'scriptname': {key, value}, url)`
         - This appears in Artemis as a DataModel
         - Set in Artemis what you want to do with the data
-- `setleds()` returns the endpoint URL, just send it again as the second parameter, so the URL doesn't need to be looked up again
 - You can use the `Config()` class for your own scripts  
   Use these to initialize, so all scripts have their own "namespace" in the config:
 ```py
 from artemisremotecontrol.config import Config
 from artemisremotecontrol import setleds
 from threading import Thread
-from time import sleep
-endpoint_url = None
+from asyncio import run, sleep
 try:
     # Get the filename and use it for the config
     config_name = __name__.split('.')[1]
@@ -38,18 +36,17 @@ except IndexError:
     # Read scripts/tasmota.py for a full example
     exit()
 
-def loop():
+async def loop():
     while True:
-        global endpoint_url
-        data = {config_name: {'key', 'value'}}
-        endpoint_url = setleds(data, endpoint_url)
-        sleep(5)
+        data = {'key', 'value'}
+        await setleds(config_name, data)
+        await sleep(5)
 
 config = Config()
 config.load(config_name)
 #Config.add(config_name, device)
 
-tloop = Thread(target=loop)
+tloop = Thread(target=lambda: run(loop()))
 tloop.start()
 ```
 

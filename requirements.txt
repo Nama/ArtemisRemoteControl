@@ -1,2 +1,2 @@
-requests>=2.25.1
-simple-plugin-loader>=1.6
+requests
+simple-plugin-loader
